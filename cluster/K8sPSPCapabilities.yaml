@@ -9,4 +9,4 @@ spec:
         kinds: ["Pod"]
     excludedNamespaces: ["kube-system"]
   parameters:
-    requiredDropCapabilities: ["KILL","MKNOD","SYS_PTRACE"]
+    requiredDropCapabilities: ["SYS_PTRACE"]
