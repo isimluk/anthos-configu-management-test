@@ -9,4 +9,4 @@ spec:
         kinds: ["Pod"]
     excludedNamespaces: ["kube-system"]
   parameters:
-    requiredDropCapabilities: ["SYS_PTRACE"]
+    requiredDropCapabilities: ["SYS_ADMIN"]
