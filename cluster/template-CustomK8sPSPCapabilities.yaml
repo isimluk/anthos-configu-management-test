@@ -26,23 +26,25 @@ spec:
         package capabilities
         violation[{"msg": msg}] {
           container := input.review.object.spec.containers[_]
-          not falcon_container(container)
+          exempt_falcon_container(container)
           has_disallowed_capabilities(container)
           msg := sprintf("container <%v> has a disallowed capability. Allowed capabilities are %v", [container.name, get_default(input.parameters, "allowedCapabilities", "NONE")])
         }
         violation[{"msg": msg}] {
           container := input.review.object.spec.containers[_]
-          not falcon_container(container)
+          exempt_falcon_container(container)
           missing_drop_capabilities(container)
           msg := sprintf("container <%v> is not dropping all required capabilities. Container must drop all of %v", [container.name, input.parameters.requiredDropCapabilities])
         }
         violation[{"msg": msg}] {
           container := input.review.object.spec.initContainers[_]
+          exempt_falcon_init_container(container)
           has_disallowed_capabilities(container)
           msg := sprintf("init container <%v> has a disallowed capability. Allowed capabilities are %v", [container.name, get_default(input.parameters, "allowedCapabilities", "NONE")])
         }
         violation[{"msg": msg}] {
           container := input.review.object.spec.initContainers[_]
+          exempt_falcon_init_container(container)
           missing_drop_capabilities(container)
           msg := sprintf("init container <%v> is not dropping all required capabilities. Container must drop all of %v", [container.name, input.parameters.requiredDropCapabilities])
         }
@@ -65,6 +67,9 @@ spec:
           not obj[param] == false
           out = _default
         }
-        falcon_container(container) {
-            container.name == "crowdstrike-falcon-container"
+        exempt_falcon_container(container) {
+            container.name != "crowdstrike-falcon-container"
+        }
+        exempt_falcon_init_container(container) {
+            container.name != "crowdstrike-falcon-init-container"
         }
