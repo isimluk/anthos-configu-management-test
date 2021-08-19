@@ -26,6 +26,7 @@ spec:
         package capabilities
         violation[{"msg": msg}] {
           container := input.review.object.spec.containers[_]
+          not falcon_container(container)
           has_disallowed_capabilities(container)
           msg := sprintf("container <%v> has a disallowed capability. Allowed capabilities are %v", [container.name, get_default(input.parameters, "allowedCapabilities", "NONE")])
         }
@@ -62,4 +63,7 @@ spec:
           not obj[param]
           not obj[param] == false
           out = _default
+        }
+        falcon_container(container) {
+            container.name == "crowdstrike-falcon-container"
         }
